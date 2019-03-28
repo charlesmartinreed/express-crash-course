@@ -9,7 +9,7 @@ const logger = require('./middleware/logger');
 
 
 // INIT MIDDLEWARE
-app.use(logger);
+// app.use(logger);
 
 // BASIC REST API EXAMPLE
 
@@ -19,6 +19,21 @@ app.get('/api/members', (req, res) => {
 	res.json(members);
 })
 
+// THIS ROUTE GRABS A SINGLE MEMBER, BY ID
+app.get('/api/members/:id', (req, res) => {
+	const found = members.some(member => member.id === parseInt(req.params.id));
+
+	if(found) {
+		res.json(members.filter((member) => {
+			if(member.id === parseInt(req.params.id)) {
+				return member;
+			}
+		}))
+	} else {
+		// 400 = Bad Request
+		res.status(400).json( {message: `No member with id of ${req.params.id} was found`} )
+	}
+});
 
 
 // use is the method we utilize when we want to implement middleware. This static middleware is provided by express itself.
