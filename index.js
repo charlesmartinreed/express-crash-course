@@ -3,15 +3,15 @@ const express = require('express'),
 			port = process.env.PORT || 5000;
 
 const path = require('path');
+const members = require('./Members');
 
-app.get('/', (req, res) => {
-// 	// res.send('<h1>Hello world!... From nodemon!</h1>');
-//
-// 	// you can load HTML files this way, but we'd have to have separate routes for each page. This isn't ideal.
-	res.sendFile(path.join(__dirname, 'public', 'index.html'))
+// BASIC REST API EXAMPLE
 
-// 	// instead, we want to make the public folder itself static with app.use
-});
+// THIS ROUTE GRABS ALL MEMBERS
+app.get('/api/members', (req, res) => {
+	// .json method takes care of stringifying these JS objects for us.
+	res.json(members);
+})
 
 
 
