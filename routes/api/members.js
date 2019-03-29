@@ -39,11 +39,32 @@ router.post('/', (req, res) => {
 	};
 
 	if(!newMember.name || !newMember.email) {
-		return res.status(400).json({ msg: 'Please include a name and email' });
+		return res.status(400).json({ message: 'Please include a name and email' });
 	}
 
 	members.push(newMember);
 	res.json(members);
 });
+
+// THIS ROUTE UPDATES AN EXISTING MEMBER
+router.put('/:id', (req, res) => {
+	const found = members.some(member => member.id === parseInt(req.params.id))
+
+	if(found) {
+		const updatedMember = req.body;
+		members.forEach(member => {
+			if(member.id === parseInt(req.params.id)) {
+				// ternary checks if the value was passed in to be changed, if not keep it what it was originally set
+				member.name = updatedMember.name ? updatedMember.name : member.name;
+				member.email = updatedMember.email ? updatedMember.email : member.email;
+
+				res.json({message: 'Member was updated', member});
+			}
+		});
+	} else {
+		// 400 = Bad Request
+		res.status(400).json( {message: `No member with id of ${req.params.id} was found`} );
+	}
+})
 
 module.exports = router;
